@@ -1,0 +1,37 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=$CODEBUILD_BUILD_NUMBER-$COMMIT_HASH
+  build:
+    commands:
+      - echo Entered build phase
+      - echo 'Build started on `date`'
+      - ls -ltra
+      - ./mvnw clean package -Ddockerfile.skip -DskipTests -q -U
+      - echo 'Building Docker Image $ECR_REPO:latest'
+      - docker build -f Dockerfile -t $ECR_REPO:latest .
+      - echo Tagging Docker Image $ECR_REPO:latest with $ECR_REPO:$IMAGE_TAG
+      - docker tag $ECR_REPO:latest $ECR_REPO:$IMAGE_TAG
+      - echo Pushing Docker Image to $ECR_REPO:latest and $ECR_REPO:$IMAGE_TAG
+      - docker push $ECR_REPO:latest
+      - docker push $ECR_REPO:$IMAGE_TAG
+    finally:
+      - echo Done building code
+  post_build:
+    commands:
+      - echo creating imagedefinitions.json dynamically
+      - printf '[{"name":"%s","imageUri":"%s:%s"}]' $ECR_REPO_NAME $ECR_REPO $IMAGE_TAG > imagedefinitions.json
+      - #'XX="$(ls -l /root/.gradle/)"; printf "%s\n" "$XX"
+      - echo Build completed on `date`
+      - cat imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
+cache:
+  paths:
+    - '/root/.m2/**/*'

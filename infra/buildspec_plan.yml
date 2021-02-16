@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo infra build plan
+      - cd infra
+      - ls -ltra
+      - npm install -g aws-cdk
+      - cdk --version
+      - env
+  build:
+    commands:
+      - SOURCE_CODE_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=$CODEBUILD_BUILD_NUMBER-$SOURCE_CODE_HASH
+      - echo "$SOURCE_CODE_HASH"
+      - "echo $IMAGE_TAG"
+      - npm install
+      - cdk diff --all
