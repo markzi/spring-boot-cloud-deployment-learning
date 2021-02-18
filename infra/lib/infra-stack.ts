@@ -10,6 +10,8 @@ const repoName: string = (process.env.ECR_REPO_NAME as string);
 export class InfraStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+    
+    var imageTag = process.env.IMAGE_TAG as string
 
     // Retrieve default VPC information
     var vpc = ec2.Vpc.fromLookup(this, "VPC", {
@@ -17,9 +19,7 @@ export class InfraStack extends cdk.Stack {
     })
 
     // ECR repository
-    const ecrRepository = new ecr.Repository(this, repoName, {
-      repositoryName: repoName,
-    });
+    const ecrRepository = ecr.Repository.fromRepositoryName(this, 'appEcr', repoName);
 
     var fargateService = new ecspatterns.ApplicationLoadBalancedFargateService(this, 'myLbFargateService', {
       vpc: vpc,
@@ -29,9 +29,14 @@ export class InfraStack extends cdk.Stack {
       // listenerPort: 8080,  
       taskImageOptions: {
         containerName: repoName,
-        image: ecs.ContainerImage.fromEcrRepository(ecrRepository, 'latest'),
+        image: ecs.ContainerImage.fromEcrRepository(ecrRepository, imageTag),
         containerPort: 8080,
       },
+    });
+
+    fargateService.targetGroup.configureHealthCheck({
+      port: '8080',
+      path: '/actuator/health',
     });
 
   }
