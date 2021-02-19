@@ -78,70 +78,70 @@ export class InfraStack extends Stack {
   //                                       //  path=health_check_path,
   //                                       //  timeout=core.Duration.seconds(60))
 
-  // const prodTargetGroup = new ApplicationTargetGroup(
-  //   this,
-  //   'ProdTargetGroup',
-  //   {
-  //     port: 8080,
-  //     targetType: TargetType.IP,
-  //     vpc,
-  //   },
-  // );
+  const prodTargetGroup = new ApplicationTargetGroup(
+    this,
+    'ProdTargetGroup',
+    {
+      port: 8080,
+      targetType: TargetType.IP,
+      vpc,
+    },
+  );
 
-  // prodTargetGroup.configureHealthCheck({
-  //   healthyHttpCodes: '200-299',
-  //   healthyThresholdCount: 3,
-  //   path: '/actuator/health',
-  //   port: '8080'
-  // })
+  prodTargetGroup.configureHealthCheck({
+    healthyHttpCodes: '200-299',
+    healthyThresholdCount: 3,
+    path: '/actuator/health',
+    port: '8080'
+  })
 
-  // prodListener.addTargetGroups('AddProdTg', {
-  //   targetGroups: [prodTargetGroup],
-  //   conditions: [
-  //     ListenerCondition.pathPatterns([
-  //       '/'
-  //     ])
-  //   ],
-  //   priority: 1,
-  // });
+  prodListener.addTargetGroups('AddProdTg', {
+    targetGroups: [prodTargetGroup],
+    conditions: [
+      ListenerCondition.pathPatterns([
+        '/'
+      ])
+    ],
+    priority: 1,
+  });
 
-  // const testTargetGroup = new ApplicationTargetGroup(
-  //   this,
-  //   'TestTargetGroup',
-  //   {
-  //     port: 8080,
-  //     targetType: TargetType.IP,
-  //     vpc,
-  //   },
-  // );
+  const testTargetGroup = new ApplicationTargetGroup(
+    this,
+    'TestTargetGroup',
+    {
+      port: 8080,
+      targetType: TargetType.IP,
+      vpc,
+    },
+  );
 
-  // testTargetGroup.configureHealthCheck({
-  //   healthyHttpCodes: '200-299',
-  //   healthyThresholdCount: 3,
-  //   path: '/actuator/health',
-  //   port: '8080'
-  // })  
+  testTargetGroup.configureHealthCheck({
+    healthyHttpCodes: '200-299',
+    healthyThresholdCount: 3,
+    path: '/actuator/health',
+    port: '8080'
+  })  
 
-  // testListener.addTargetGroups('AddTestTg', {
-  //   targetGroups: [testTargetGroup],
-  //   conditions: [
-  //     ListenerCondition.pathPatterns([
-  //       '/'
-  //     ])
-  //   ],
-  //   priority: 1,    
-  // });
+  testListener.addTargetGroups('AddTestTg', {
+    targetGroups: [testTargetGroup],
+    conditions: [
+      ListenerCondition.pathPatterns([
+        '/'
+      ])
+    ],
+    priority: 1,    
+  });
 
-  // const image = `${ecrRepository}:${imageTag}`;
+  const image = `${ecrRepository}:${imageTag}`;
 
-  // // Will be replaced by CodeDeploy in CodePipeline
-  // const taskDefinition = new DummyTaskDefinition(this,
-  //   'DummyTaskDefinition',
-  //   {
-  //     image: image,
-  //     family: 'blue-green',
-  //   },
-  // );
+  // Will be replaced by CodeDeploy in CodePipeline
+  const taskDefinition = new DummyTaskDefinition(this,
+    'DummyTaskDefinition',
+    {
+      image: image,
+      family: 'blue-green',
+    },
+  );
 
   // const ecsService = new EcsService(this, 'EcsService', {
   //   cluster,
