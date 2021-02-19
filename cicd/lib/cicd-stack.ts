@@ -183,6 +183,7 @@ export class CicdStack extends cdk.Stack {
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationFullAccess'));
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonVPCFullAccess'));
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2FullAccess'));
+    pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSLambda_FullAccess'));
 
     pipelineProject.addToRolePolicy(this.ecsPolicy());
     pipelineProject.addToRolePolicy(this.ecrPolicy());

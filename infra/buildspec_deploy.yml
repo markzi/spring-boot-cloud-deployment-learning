@@ -14,3 +14,8 @@ phases:
       - echo $IMAGE_TAG
       - npm install
       - cdk deploy --require-approval never
+cache:
+  paths:
+    - '/root/.m2/**/*'
+    - '/root/.npm/**/*'
+    - 'build/**/*'      

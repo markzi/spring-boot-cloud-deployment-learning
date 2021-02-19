@@ -46,10 +46,10 @@ export class InfraStack extends Stack {
   // ECR repository
   const ecrRepository = Repository.fromRepositoryName(this, 'appEcr', repoName);
 
-  // const cluster = new ecs.Cluster(this, 'Cluster', {
-  //   vpc,
-  //   clusterName: 'blue-green-cluster',
-  // });
+  const cluster = new ecs.Cluster(this, 'Cluster', {
+    vpc,
+    clusterName: 'blue-green-cluster',
+  });
 
   // const loadBalancer = new ApplicationLoadBalancer(this, 'LoadBalancer', {
   //   vpc,
