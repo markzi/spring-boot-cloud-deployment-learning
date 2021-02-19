@@ -277,6 +277,7 @@ public createDeployAction(pipelineProject: codebuild.PipelineProject, sourceActi
       effect: iam.Effect.ALLOW,
       actions: [
         'codedeploy:GetApplication',
+        'codedeploy:CreateApplication'
       ],
       resources: ['*'],
     })
