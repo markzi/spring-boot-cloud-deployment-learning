@@ -46,126 +46,126 @@ export class InfraStack extends Stack {
   // ECR repository
   const ecrRepository = Repository.fromRepositoryName(this, 'appEcr', repoName);
 
-  const cluster = new ecs.Cluster(this, 'Cluster', {
-    vpc,
-    clusterName: 'blue-green-cluster',
-  });
+  // const cluster = new ecs.Cluster(this, 'Cluster', {
+  //   vpc,
+  //   clusterName: 'blue-green-cluster',
+  // });
 
-  const loadBalancer = new ApplicationLoadBalancer(this, 'LoadBalancer', {
-    vpc,
-    internetFacing: true,
-  });
+  // const loadBalancer = new ApplicationLoadBalancer(this, 'LoadBalancer', {
+  //   vpc,
+  //   internetFacing: true,
+  // });
 
-  const defaultAction = ListenerAction.fixedResponse(400, {
-    contentType: 'application/json',
-    messageBody: '{"status":400}'
-  });
+  // const defaultAction = ListenerAction.fixedResponse(400, {
+  //   contentType: 'application/json',
+  //   messageBody: '{"status":400}'
+  // });
 
-  const prodListener = loadBalancer.addListener('ProfListener', {
-    port: 8080,
-    protocol: ApplicationProtocol.HTTP,
-    defaultAction: defaultAction
-  });
+  // const prodListener = loadBalancer.addListener('ProfListener', {
+  //   port: 8080,
+  //   protocol: ApplicationProtocol.HTTP,
+  //   defaultAction: defaultAction
+  // });
 
-  const testListener = loadBalancer.addListener('TestListener', {
-    port: 8081,
-    protocol: ApplicationProtocol.HTTP,
-    defaultAction: defaultAction
-  });
+  // const testListener = loadBalancer.addListener('TestListener', {
+  //   port: 8081,
+  //   protocol: ApplicationProtocol.HTTP,
+  //   defaultAction: defaultAction
+  // });
 
-  // const health_check = new HealthCheck(healthy_http_codes="200-299", healthy_threshold_count=3,
-                                        //  interval=core.Duration.seconds(70),
-                                        //  path=health_check_path,
-                                        //  timeout=core.Duration.seconds(60))
+  // // const health_check = new HealthCheck(healthy_http_codes="200-299", healthy_threshold_count=3,
+  //                                       //  interval=core.Duration.seconds(70),
+  //                                       //  path=health_check_path,
+  //                                       //  timeout=core.Duration.seconds(60))
 
-  const prodTargetGroup = new ApplicationTargetGroup(
-    this,
-    'ProdTargetGroup',
-    {
-      port: 8080,
-      targetType: TargetType.IP,
-      vpc,
-    },
-  );
+  // const prodTargetGroup = new ApplicationTargetGroup(
+  //   this,
+  //   'ProdTargetGroup',
+  //   {
+  //     port: 8080,
+  //     targetType: TargetType.IP,
+  //     vpc,
+  //   },
+  // );
 
-  prodTargetGroup.configureHealthCheck({
-    healthyHttpCodes: '200-299',
-    healthyThresholdCount: 3,
-    path: '/actuator/health',
-    port: '8080'
-  })
+  // prodTargetGroup.configureHealthCheck({
+  //   healthyHttpCodes: '200-299',
+  //   healthyThresholdCount: 3,
+  //   path: '/actuator/health',
+  //   port: '8080'
+  // })
 
-  prodListener.addTargetGroups('AddProdTg', {
-    targetGroups: [prodTargetGroup],
-    conditions: [
-      ListenerCondition.pathPatterns([
-        '/'
-      ])
-    ],
-    priority: 1,
-  });
+  // prodListener.addTargetGroups('AddProdTg', {
+  //   targetGroups: [prodTargetGroup],
+  //   conditions: [
+  //     ListenerCondition.pathPatterns([
+  //       '/'
+  //     ])
+  //   ],
+  //   priority: 1,
+  // });
 
-  const testTargetGroup = new ApplicationTargetGroup(
-    this,
-    'TestTargetGroup',
-    {
-      port: 8080,
-      targetType: TargetType.IP,
-      vpc,
-    },
-  );
+  // const testTargetGroup = new ApplicationTargetGroup(
+  //   this,
+  //   'TestTargetGroup',
+  //   {
+  //     port: 8080,
+  //     targetType: TargetType.IP,
+  //     vpc,
+  //   },
+  // );
 
-  testTargetGroup.configureHealthCheck({
-    healthyHttpCodes: '200-299',
-    healthyThresholdCount: 3,
-    path: '/actuator/health',
-    port: '8080'
-  })  
+  // testTargetGroup.configureHealthCheck({
+  //   healthyHttpCodes: '200-299',
+  //   healthyThresholdCount: 3,
+  //   path: '/actuator/health',
+  //   port: '8080'
+  // })  
 
-  testListener.addTargetGroups('AddTestTg', {
-    targetGroups: [testTargetGroup],
-    conditions: [
-      ListenerCondition.pathPatterns([
-        '/'
-      ])
-    ],
-    priority: 1,    
-  });
+  // testListener.addTargetGroups('AddTestTg', {
+  //   targetGroups: [testTargetGroup],
+  //   conditions: [
+  //     ListenerCondition.pathPatterns([
+  //       '/'
+  //     ])
+  //   ],
+  //   priority: 1,    
+  // });
 
-  const image = `${ecrRepository}:${imageTag}`;
+  // const image = `${ecrRepository}:${imageTag}`;
 
-  // Will be replaced by CodeDeploy in CodePipeline
-  const taskDefinition = new DummyTaskDefinition(this,
-    'DummyTaskDefinition',
-    {
-      image: image,
-      family: 'blue-green',
-    },
-  );
+  // // Will be replaced by CodeDeploy in CodePipeline
+  // const taskDefinition = new DummyTaskDefinition(this,
+  //   'DummyTaskDefinition',
+  //   {
+  //     image: image,
+  //     family: 'blue-green',
+  //   },
+  // );
 
-  const ecsService = new EcsService(this, 'EcsService', {
-    cluster,
-    serviceName: 'blue-green-service',
-    desiredCount: 2,
-    taskDefinition,
-    prodTargetGroup,
-  });
+  // const ecsService = new EcsService(this, 'EcsService', {
+  //   cluster,
+  //   serviceName: 'blue-green-service',
+  //   desiredCount: 2,
+  //   taskDefinition,
+  //   prodTargetGroup,
+  // });
 
+  // // ecsService.connections.allowFrom(loadBalancer, ec2.Port.tcp(8080));
   // ecsService.connections.allowFrom(loadBalancer, ec2.Port.tcp(8080));
-  ecsService.connections.allowFrom(loadBalancer, ec2.Port.tcp(8080));
 
-  const deploymentGroup = new EcsDeploymentGroup(this, 'DeploymentGroup', {
-    applicationName: 'blue-green-application',
-    deploymentGroupName: 'blue-green-deployment-group',
-    ecsServices: [ecsService],
-    targetGroupNames: [
-      prodTargetGroup.targetGroupName,
-      testTargetGroup.targetGroupName,
-    ],
-    prodTrafficListener: prodListener,
-    testTrafficListener: testListener,
-    terminationWaitTimeInMinutes: 10,
-  });
+  // const deploymentGroup = new EcsDeploymentGroup(this, 'DeploymentGroup', {
+  //   applicationName: 'blue-green-application',
+  //   deploymentGroupName: 'blue-green-deployment-group',
+  //   ecsServices: [ecsService],
+  //   targetGroupNames: [
+  //     prodTargetGroup.targetGroupName,
+  //     testTargetGroup.targetGroupName,
+  //   ],
+  //   prodTrafficListener: prodListener,
+  //   testTrafficListener: testListener,
+  //   terminationWaitTimeInMinutes: 10,
+  // });
 
   // var fargateService = new ecspatterns.ApplicationLoadBalancedFargateService(this, 'myLbFargateService', {
   //   vpc: vpc,

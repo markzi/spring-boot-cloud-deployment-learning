@@ -138,8 +138,9 @@ export class CicdStack extends cdk.Stack {
     });
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryPowerUser'));
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationFullAccess'));
-    pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonVPCReadOnlyAccess'));
-
+    pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonVPCFullAccess'));
+    pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2FullAccess'));    
+    pipelineProject.addToRolePolicy(this.codedeployPolicy());
     return pipelineProject;
   }
 
@@ -180,7 +181,7 @@ export class CicdStack extends cdk.Stack {
     });
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryPowerUser'));
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationFullAccess'));
-    pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonVPCReadOnlyAccess'));
+    pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonVPCFullAccess'));
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2FullAccess'));
 
     pipelineProject.addToRolePolicy(this.ecsPolicy());
@@ -276,8 +277,7 @@ public createDeployAction(pipelineProject: codebuild.PipelineProject, sourceActi
     return new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       actions: [
-        'codedeploy:GetApplication',
-        'codedeploy:CreateApplication'
+        'codedeploy:*'
       ],
       resources: ['*'],
     })
