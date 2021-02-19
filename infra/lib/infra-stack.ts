@@ -51,27 +51,27 @@ export class InfraStack extends Stack {
     clusterName: 'blue-green-cluster',
   });
 
-  // const loadBalancer = new ApplicationLoadBalancer(this, 'LoadBalancer', {
-  //   vpc,
-  //   internetFacing: true,
-  // });
+  const loadBalancer = new ApplicationLoadBalancer(this, 'LoadBalancer', {
+    vpc,
+    internetFacing: true,
+  });
 
-  // const defaultAction = ListenerAction.fixedResponse(400, {
-  //   contentType: 'application/json',
-  //   messageBody: '{"status":400}'
-  // });
+  const defaultAction = ListenerAction.fixedResponse(400, {
+    contentType: 'application/json',
+    messageBody: '{"status":400}'
+  });
 
-  // const prodListener = loadBalancer.addListener('ProfListener', {
-  //   port: 8080,
-  //   protocol: ApplicationProtocol.HTTP,
-  //   defaultAction: defaultAction
-  // });
+  const prodListener = loadBalancer.addListener('ProfListener', {
+    port: 8080,
+    protocol: ApplicationProtocol.HTTP,
+    defaultAction: defaultAction
+  });
 
-  // const testListener = loadBalancer.addListener('TestListener', {
-  //   port: 8081,
-  //   protocol: ApplicationProtocol.HTTP,
-  //   defaultAction: defaultAction
-  // });
+  const testListener = loadBalancer.addListener('TestListener', {
+    port: 8081,
+    protocol: ApplicationProtocol.HTTP,
+    defaultAction: defaultAction
+  });
 
   // // const health_check = new HealthCheck(healthy_http_codes="200-299", healthy_threshold_count=3,
   //                                       //  interval=core.Duration.seconds(70),
