@@ -143,29 +143,29 @@ export class InfraStack extends Stack {
     },
   );
 
-  // const ecsService = new EcsService(this, 'EcsService', {
-  //   cluster,
-  //   serviceName: 'blue-green-service',
-  //   desiredCount: 2,
-  //   taskDefinition,
-  //   prodTargetGroup,
-  // });
+  const ecsService = new EcsService(this, 'EcsService', {
+    cluster,
+    serviceName: 'blue-green-service',
+    desiredCount: 2,
+    taskDefinition,
+    prodTargetGroup,
+  });
 
-  // // ecsService.connections.allowFrom(loadBalancer, ec2.Port.tcp(8080));
   // ecsService.connections.allowFrom(loadBalancer, ec2.Port.tcp(8080));
+  ecsService.connections.allowFrom(loadBalancer, ec2.Port.tcp(8080));
 
-  // const deploymentGroup = new EcsDeploymentGroup(this, 'DeploymentGroup', {
-  //   applicationName: 'blue-green-application',
-  //   deploymentGroupName: 'blue-green-deployment-group',
-  //   ecsServices: [ecsService],
-  //   targetGroupNames: [
-  //     prodTargetGroup.targetGroupName,
-  //     testTargetGroup.targetGroupName,
-  //   ],
-  //   prodTrafficListener: prodListener,
-  //   testTrafficListener: testListener,
-  //   terminationWaitTimeInMinutes: 10,
-  // });
+  const deploymentGroup = new EcsDeploymentGroup(this, 'DeploymentGroup', {
+    applicationName: 'blue-green-application',
+    deploymentGroupName: 'blue-green-deployment-group',
+    ecsServices: [ecsService],
+    targetGroupNames: [
+      prodTargetGroup.targetGroupName,
+      testTargetGroup.targetGroupName,
+    ],
+    prodTrafficListener: prodListener,
+    testTrafficListener: testListener,
+    terminationWaitTimeInMinutes: 10,
+  });
 
   // var fargateService = new ecspatterns.ApplicationLoadBalancedFargateService(this, 'myLbFargateService', {
   //   vpc: vpc,
