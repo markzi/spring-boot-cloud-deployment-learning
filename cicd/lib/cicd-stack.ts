@@ -192,6 +192,7 @@ export class CicdStack extends cdk.Stack {
     pipelineProject.addToRolePolicy(this.s3Policy());
     pipelineProject.addToRolePolicy(this.ssmPolicy());
     pipelineProject.addToRolePolicy(this.autoScalingPolicy());
+    pipelineProject.addToRolePolicy(this.codedeployPolicy());
 
     return pipelineProject;
   }
@@ -269,6 +270,17 @@ public createDeployAction(pipelineProject: codebuild.PipelineProject, sourceActi
   buildAction.actionProperties.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryPowerUser'));
   return buildAction;
 }  
+
+
+  public codedeployPolicy(): iam.PolicyStatement {
+    return new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: [
+        'codedeploy:GetApplication',
+      ],
+      resources: ['*'],
+    })
+  }
 
   public ecsPolicy(): iam.PolicyStatement {
     return new iam.PolicyStatement({
