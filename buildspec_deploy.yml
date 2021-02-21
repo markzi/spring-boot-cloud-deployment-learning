@@ -22,13 +22,13 @@ phases:
       - cat ../taskdef.json
 artifacts:
   files:
-    - ../appspec.yaml
-    - ../taskdef.json
+    - appspec.yaml
+    - taskdef.json
   secondary-artifacts:
     ManifestArtifact:
       files:
-        - ../appspec.yaml
-        - ../taskdef.json       
+        - appspec.yaml
+        - taskdef.json       
 cache:
   paths:
     - '/root/.m2/**/*'

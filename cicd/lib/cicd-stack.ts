@@ -133,7 +133,7 @@ export class CicdStack extends cdk.Stack {
           value: process.env["CDK_DEPLOY_REGION"]
         }
       },
-      buildSpec: codebuild.BuildSpec.fromSourceFilename("infra/buildspec_plan.yml"),
+      buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec_plan.yml"),
       cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM)
     });
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryPowerUser'));
@@ -176,7 +176,7 @@ export class CicdStack extends cdk.Stack {
         },
 
       },
-      buildSpec: codebuild.BuildSpec.fromSourceFilename("infra/buildspec_deploy.yml"),
+      buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec_deploy.yml"),
       cache: codebuild.Cache.local(codebuild.LocalCacheMode.DOCKER_LAYER, codebuild.LocalCacheMode.CUSTOM)
     });
     pipelineProject.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryPowerUser'));

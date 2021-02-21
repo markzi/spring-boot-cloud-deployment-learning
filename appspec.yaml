@@ -3,8 +3,8 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: <TASK_DEFINITION>
+        TaskDefinition: arn:aws:ecs:eu-west-2:032665038704:task-definition/spring-boot-cloud-deployment-learning:1
         LoadBalancerInfo:
-          ContainerName: "spring-boot-cloud-deployment-learning"
+          ContainerName: "sample-website"
           ContainerPort: 8080
         PlatformVersion: "1.4.0"
