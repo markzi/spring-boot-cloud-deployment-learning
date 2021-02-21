@@ -142,14 +142,14 @@ export class InfraStack extends Stack {
     'DummyTaskDefinition',
     {
       image: image,
-      family: 'blue-green',
+      family: 'spring-boot-cloud-deployment-learning',
       containerPort: 8080
     },
   );
 
   const ecsService = new EcsService(this, 'EcsService', {
     cluster,
-    serviceName: 'blue-green-service',
+    serviceName: 'spring-boot-cloud-deployment-learning',
     desiredCount: 2,
     taskDefinition,
     prodTargetGroup,
