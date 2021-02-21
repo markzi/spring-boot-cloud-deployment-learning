@@ -3,6 +3,7 @@ import { LogGroup, RetentionDays } from "@aws-cdk/aws-logs";
 import { Pipeline, Artifact } from '@aws-cdk/aws-codepipeline';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as ecs from '@aws-cdk/aws-ecs';
+import * as iam from '@aws-cdk/aws-iam';
 import { ApplicationLoadBalancer, ApplicationTargetGroup, TargetType, ListenerCondition, ListenerAction, ApplicationProtocol, HealthCheck } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Construct, RemovalPolicy, Stack, StackProps, Fn } from '@aws-cdk/core';
 
@@ -10,6 +11,7 @@ import { EcsService, DummyTaskDefinition, EcsDeploymentGroup, PushImageProject }
 import { ImageRepository } from '@cloudcomponents/cdk-container-registry';
 
 const repoName: string = (process.env.ECR_REPO_NAME as string);
+const serviceName = 'spring-boot-cloud-deployment-learning';
 
 export class InfraStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -140,6 +142,7 @@ export class InfraStack extends Stack {
     {
       image: image,
       family: 'blue-green',
+      containerPort: 8080
     },
   );
 
@@ -150,6 +153,11 @@ export class InfraStack extends Stack {
     taskDefinition,
     prodTargetGroup,
   });
+
+  // ssm.StringParameter(self, "ParameterEcsRoleArn",
+  // string_value=ecs_service_role.role_arn,
+  // parameter_name=f"{service_name}-ecs-role",
+  // description=f"SSM Parameter for the role arn of {service_name}")
 
   // ecsService.connections.allowFrom(loadBalancer, ec2.Port.tcp(8080));
   ecsService.connections.allowFrom(loadBalancer, ec2.Port.tcp(8080));
@@ -166,6 +174,45 @@ export class InfraStack extends Stack {
     testTrafficListener: testListener,
     terminationWaitTimeInMinutes: 10,
   });
+
+  const containerTaskRole = new iam.Role(this, 'SpringCloudAppRole', {
+    assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com')
+  })
+  containerTaskRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess'))
+  containerTaskRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSQSFullAccess'))
+
+  // const task_definition = {
+  //           "executionRoleArn": "ROLE_ARN",
+  //           "containerDefinitions": [
+  //               {
+  //                   "name": serviceName,
+  //                   "image": "<IMAGE_NAME>",
+  //                   "essential": true,
+  //                   "portMappings": [
+  //                       {
+  //                           "hostPort": 8080,
+  //                           "protocol": "tcp",
+  //                           "containerPort": 8080
+  //                       }
+  //                   ],
+  //                   "logConfiguration": {
+  //                       "logDriver": "awslogs",
+  //                       "secretOptions": [],
+  //                       "options": {
+  //                           "awslogs-group": serviceName,
+  //                           "awslogs-region": props?.env?.region,
+  //                           "awslogs-stream-prefix": "ecs"
+  //                       }
+  //                   }
+  //               }
+  //           ],
+  //           "requiresCompatibilities": ["FARGATE"],
+  //           "networkMode": "awsvpc",
+  //           "cpu": "256",
+  //           "memory": "512",
+  //           "taskRoleArn": "ROLE_ARN",
+  //           "family": serviceName
+  //       }
 
   // var fargateService = new ecspatterns.ApplicationLoadBalancedFargateService(this, 'myLbFargateService', {
   //   vpc: vpc,

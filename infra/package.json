@@ -26,7 +26,7 @@
     "@aws-cdk/aws-ecr": "^1.90.0",
     "@aws-cdk/aws-ecs": "^1.90.0",
     "@aws-cdk/aws-ecs-patterns": "^1.90.0",
-    "@aws-cdk/aws-iam": "^1.90.0",
+    "@aws-cdk/aws-iam": "^1.90.1",
     "@aws-cdk/aws-logs": "^1.90.0",
     "@aws-cdk/core": "1.90.0",
     "@cloudcomponents/cdk-blue-green-container-deployment": "^1.25.0",

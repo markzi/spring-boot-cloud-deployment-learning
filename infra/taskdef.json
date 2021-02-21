@@ -1,0 +1,22 @@
+{
+  "executionRoleArn": "SED_REPLACE_EXECUTION_ROLE_ARN",
+  "containerDefinitions": [
+    {
+      "name": "spring-boot-cloud-deployment-learning",
+      "image": "<IMAGE1_NAME>",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "containerPort": 8080
+        }
+      ]
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "memory": "512",
+  "family": "spring-boot-cloud-deployment-learning"
+}
