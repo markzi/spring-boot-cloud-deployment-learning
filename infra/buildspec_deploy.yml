@@ -13,7 +13,7 @@ phases:
     commands:
       - echo $IMAGE_TAG
       - npm install
-      - cdk deploy --require-approval never
+      - cdk deploy --require-approval never --all
       - echo Setting environment variables...
       - cp taskdef.json ../
       - ECS_ROLE_ARN=$(aws ssm get-parameter --name "spring-cloud-app-role-arn" | jq -r '.Parameter.Value')
@@ -22,12 +22,12 @@ phases:
       - cat ../taskdef.json
 artifacts:
   files:
-    - appspec.yaml
+    - ../appspec.yaml
     - ../taskdef.json
   secondary-artifacts:
     ManifestArtifact:
       files:
-        - appspec.yaml
+        - ../appspec.yaml
         - ../taskdef.json       
 cache:
   paths:

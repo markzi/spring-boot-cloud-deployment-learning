@@ -11,10 +11,10 @@ phases:
       - cat taskdef.json
 artifacts:
   files:
-    - appspec.yaml
+    - ../appspec.yaml
     - ../taskdef.json
   secondary-artifacts:
     ManifestArtifact:
       files:
-        - appspec.yaml
+        - ../appspec.yaml
         - ../taskdef.json 
