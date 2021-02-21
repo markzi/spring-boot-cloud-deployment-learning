@@ -152,6 +152,7 @@ export class InfraStack extends Stack {
     desiredCount: 2,
     taskDefinition,
     prodTargetGroup,
+    containerPort: 8080
   });
 
   // ssm.StringParameter(self, "ParameterEcsRoleArn",
