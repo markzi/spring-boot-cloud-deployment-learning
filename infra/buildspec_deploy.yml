@@ -14,6 +14,21 @@ phases:
       - echo $IMAGE_TAG
       - npm install
       - cdk deploy --require-approval never
+      - echo Setting environment variables...
+      - cp taskdef.json ../
+      - ECS_ROLE_ARN=$(aws ssm get-parameter --name "spring-cloud-app-role-arn" | jq -r '.Parameter.Value')
+      - sed -i "s|SED_REPLACE_EXECUTION_ROLE_ARN|$ECS_ROLE_ARN|g" ../taskdef.json
+      - aws deploy update-deployment-group --application-name blue-green-application --current-deployment-group-name blue-green-deployment-group --deployment-config-name CodeDeployDefault.ECSLinear10PercentEvery3Minutes
+      - cat taskdef.json
+artifacts:
+  files:
+    - appspec.yaml
+    - ../taskdef.json
+  secondary-artifacts:
+    ManifestArtifact:
+      files:
+        - appspec.yaml
+        - ../taskdef.json       
 cache:
   paths:
     - '/root/.m2/**/*'

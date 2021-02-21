@@ -4,6 +4,7 @@ import { Pipeline, Artifact } from '@aws-cdk/aws-codepipeline';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as ecs from '@aws-cdk/aws-ecs';
 import * as iam from '@aws-cdk/aws-iam';
+import * as ssm from '@aws-cdk/aws-ssm';
 import { ApplicationLoadBalancer, ApplicationTargetGroup, TargetType, ListenerCondition, ListenerAction, ApplicationProtocol, HealthCheck } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { Construct, RemovalPolicy, Stack, StackProps, Fn } from '@aws-cdk/core';
 
@@ -181,6 +182,15 @@ export class InfraStack extends Stack {
   })
   containerTaskRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess'))
   containerTaskRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSQSFullAccess'))
+
+  // Create a new SSM Parameter holding a String
+  const param = new ssm.StringParameter(this, 'spring-cloud-app-role-arn', {
+    description: 'Some user-friendly description',
+    stringValue: containerTaskRole.roleArn,
+    parameterName: 'spring-cloud-app-role-arn'
+  });
+
+
 
   // const task_definition = {
   //           "executionRoleArn": "ROLE_ARN",
