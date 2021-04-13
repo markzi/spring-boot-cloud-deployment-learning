@@ -9,6 +9,7 @@ pipeline {
                 steps {
                     sh '''
                         echo "Running..."
+                        java -version
                     '''
                 }
         }
