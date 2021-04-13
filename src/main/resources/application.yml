@@ -1,0 +1,10 @@
+witcltd:
+  base-path: /spring-boot-cloud-deployment-learning
+
+management:
+  endpoints:
+    web:
+      base-path: ${witcltd.base-path}/actuator
+
+server:
+  servlet.context-path: ${witcltd.base-path}
