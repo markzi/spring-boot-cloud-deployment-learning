@@ -12,7 +12,8 @@ pipeline {
                         echo "Running..."
                         java -version
                         echo "PATH = ${PATH}"
-                        echo "M2_HOME = ${M2_HOME}"       
+                        echo "M2_HOME = ${M2_HOME}"
+                        echo "JAVA_HOME = ${JAVA_HOME}"       
                     '''
                 }
         }
