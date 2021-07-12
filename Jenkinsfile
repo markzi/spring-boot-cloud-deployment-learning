@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Build') {
             tools {
-                jdk 'jdk11'
+                jdk '11'
             }
             steps {
                 sh 'mvn -DskipTests=true clean package'
@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Test') {
             tools {
-                jdk 'jdk11'
+                jdk '11'
             }            
             steps {
                 sh 'mvn test'
