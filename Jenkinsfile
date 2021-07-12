@@ -5,16 +5,16 @@ pipeline {
         maven 'maven'
     }
     stages {
-        tools {
-            jdk '11'
-        }
         stage ('Initialize') {
-                steps {
-                    sh '''
-                        echo "Running..."
-                        java -version
-                    '''
-                }
+            tools {
+                jdk '11'
+            }            
+            steps {
+                sh '''
+                    echo "Running..."
+                    java -version
+                '''
+            }
         }
         // stage('Build') {
         //     steps {
