@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage ('Initialize') {
             tools {
-                jdk '11'
+                jdk '14'
             }            
             steps {
                 sh '''
