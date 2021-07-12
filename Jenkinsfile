@@ -5,7 +5,7 @@ pipeline {
     //     maven 'maven'
     // }
     stages {
-        stage ('Initialize') {
+        stage ('JDK 11 Test') {
             tools {
                 jdk '11'
             }            
@@ -19,6 +19,20 @@ pipeline {
                 '''
             }
         }
+        stage ('JDK 14 Test') {
+            tools {
+                jdk '11'
+            }            
+            steps {
+                sh '''
+                    echo "Running..."
+                    echo "JAVA HOME ${JAVA_HOME}"
+                    echo "WHICH JAVA"
+                    which java
+                    java -version
+                '''
+            }
+        }        
         // stage('Build') {
         //     steps {
         //         sh 'mvn -DskipTests=true clean package'
