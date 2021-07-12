@@ -22,7 +22,14 @@ pipeline {
                 jdk '11'
             }
             steps {
-                sh 'mvn -DskipTests=true clean package'
+                sh '''
+                        echo "Running..."
+                        java -version
+                        echo "PATH = ${PATH}"
+                        echo "M2_HOME = ${M2_HOME}"
+                        echo "JAVA_HOME = ${JAVA_HOME}"       
+                        mvn -DskipTests=true clean package
+                    '''
             }
         }
         stage('Test') {
