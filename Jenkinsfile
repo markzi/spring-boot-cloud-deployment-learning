@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'maven'
-        jdk '14'
+        jdk 'jdk11'
     }
     stages {
         stage ('Initialize') {
