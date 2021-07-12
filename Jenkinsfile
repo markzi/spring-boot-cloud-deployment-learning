@@ -12,6 +12,9 @@ pipeline {
             steps {
                 sh '''
                     echo "Running..."
+                    echo "JAVA HOME ${JAVA_HOME}
+                    echo "WHICH JAVA"
+                    which java
                     java -version
                 '''
             }
