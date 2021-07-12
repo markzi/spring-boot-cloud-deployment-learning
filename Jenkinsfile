@@ -1,9 +1,10 @@
 pipeline {
     agent any
 
-    // tools {
-    //     maven 'maven'
-    // }
+    tools {
+        maven 'maven'
+        jdk '11'
+    }
     stages {
         stage ('JDK 11 Test') {
             tools {
@@ -33,11 +34,11 @@ pipeline {
                 '''
             }
         }        
-        // stage('Build') {
-        //     steps {
-        //         sh 'mvn -DskipTests=true clean package'
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                sh 'mvn -DskipTests=true clean package'
+            }
+        }
         // stage('Test') {
         //     steps {
         //         sh 'mvn test'
