@@ -21,7 +21,7 @@ pipeline {
         }
         stage ('JDK 14 Test') {
             tools {
-                jdk '11'
+                jdk '14'
             }            
             steps {
                 sh '''
