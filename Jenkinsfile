@@ -18,6 +18,7 @@ pipeline {
                 }
         }
         stage('Build') {
+            tool name : 'jdk11'
             steps {
                 sh 'mvn -DskipTests=true clean package'
             }
